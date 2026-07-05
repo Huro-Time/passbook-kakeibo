@@ -216,9 +216,9 @@
       background:var(--paper);
       font-family:var(--dot-font);
     }
-    col.date{width:18%}
-    col.purpose{width:20%}
-    col.money{width:20.666%}
+    col.date{width:17%}
+    col.purpose{width:23%}
+    col.money{width:20%}
     th,td{
       border-right:1px solid var(--line);
       border-bottom:1px solid var(--line);
@@ -246,7 +246,7 @@
     th:nth-child(1),th:nth-child(2){letter-spacing:.12em}
     td{
       text-align:right;
-      font-size:clamp(10.5px,2.75vw,13.5px);
+      font-size:clamp(13px,3.55vw,16px);
       font-weight:700;
       letter-spacing:-.01em;
       line-height:1.05;
@@ -255,7 +255,7 @@
     }
     td:nth-child(1){
       text-align:center;
-      font-size:clamp(8.8px,2.3vw,10px);
+      font-size:clamp(12px,3.25vw,15px);
       color:#111;
       letter-spacing:-.04em;
       word-break:keep-all;
@@ -264,15 +264,15 @@
     }
     td:nth-child(2){
       text-align:center;
-      font-size:clamp(10px,2.75vw,13px);
+      font-size:clamp(11px,3.05vw,14px);
       line-height:1.1;
       word-break:keep-all;
       color:#111;
       letter-spacing:-.03em;
     }
-    .money-cell{font-size:clamp(10.5px,2.75vw,13.5px)}
-    .money-cell.money-sm{font-size:clamp(8.6px,2.25vw,11px);letter-spacing:-.06em}
-    .money-cell.money-xs{font-size:clamp(7.6px,2.0vw,10px);letter-spacing:-.08em}
+    .money-cell{font-size:clamp(13px,3.45vw,16px)}
+    .money-cell.money-sm{font-size:clamp(11px,3.0vw,14px);letter-spacing:-.06em}
+    .money-cell.money-xs{font-size:clamp(10px,2.65vw,12px);letter-spacing:-.08em}
     tr.initial td{color:#2b6694;background:#fbfff1}
     tr.selected td{outline:2px solid rgba(35,168,74,.25);outline-offset:-2px;background:#f6fff1}
     tr.empty td{color:transparent;height:34px}
@@ -323,6 +323,76 @@
     .pill button{background:transparent;color:#b41515;font-weight:900;padding:0;min-height:0}
     .note{font-size:12px;color:var(--muted);line-height:1.55;margin:8px 2px 0}
     .divider{height:1px;background:#edf1ed;margin:2px 0}
+    .amount-label-wrap{display:grid;gap:5px}
+    .amount-input-wrap{position:relative}
+    .amount-input-wrap input{
+      padding-left:40px;
+      padding-right:12px;
+      text-align:right;
+      font-variant-numeric:tabular-nums;
+      font-weight:900;
+      letter-spacing:.02em;
+    }
+    .amount-input-wrap::after{
+      content:'¥';
+      position:absolute;
+      left:14px;
+      top:50%;
+      transform:translateY(-50%);
+      font-size:16px;
+      font-weight:900;
+      color:#6f7a70;
+      pointer-events:none;
+    }
+    .tenkey-note{font-size:11px;color:var(--muted);line-height:1.45;margin-top:2px}
+    .tenkey{
+      border:1px solid #dbe7dc;
+      border-radius:18px;
+      padding:12px;
+      background:linear-gradient(180deg,#f7fbf8 0%,#eef6ef 100%);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.95), 0 10px 20px rgba(38,65,45,.08);
+      display:grid;
+      gap:10px;
+    }
+    .tenkey-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      color:#536055;
+      font-size:12px;
+      font-weight:900;
+    }
+    .tenkey-head .mini{padding:6px 10px;font-size:11px}
+    .tenkey-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+    }
+    .tenkey-key{
+      min-height:54px;
+      border-radius:16px;
+      background:linear-gradient(180deg,#ffffff 0%,#f0f3f0 100%);
+      border:1px solid #d6ddd7;
+      color:#273028;
+      font-size:24px;
+      font-weight:900;
+      box-shadow:0 2px 0 #cad3cb, 0 8px 14px rgba(38,65,45,.10);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      user-select:none;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .tenkey-key:active{transform:translateY(1px);box-shadow:0 1px 0 #cad3cb, 0 4px 8px rgba(38,65,45,.12)}
+    .tenkey-key.function{font-size:16px}
+    .tenkey-key.zero{grid-column:span 1}
+    .tenkey-key.enter{
+      background:linear-gradient(180deg,#dff6e5 0%,#b6e6c2 100%);
+      border-color:#8bcea0;
+      color:var(--green-dark);
+      font-size:16px;
+    }
     @media (max-width:390px){
       .card .value{font-size:15px}
       h1{font-size:18px}
@@ -354,7 +424,7 @@
     <section id="listPanel" class="panel active">
       <div class="month-tools" aria-label="表示月の切り替え">
         <button class="ghost" id="prevMonthBtn" aria-label="前月">‹</button>
-        <input id="monthFilter" type="month" />
+        <input id="monthFilter" type="text" inputmode="none" readonly aria-label="表示月" />
         <button class="ghost" id="nextMonthBtn" aria-label="翌月">›</button>
       </div>
       <div class="month-strip" id="monthStrip" aria-label="月別通帳一覧"></div>
@@ -398,7 +468,30 @@
         </div>
         <div class="two">
           <label>日付<input id="date" type="date" required /></label>
-          <label>金額<input id="amount" type="number" inputmode="numeric" min="1" step="1" placeholder="1200" required /></label>
+          <label class="amount-label-wrap">金額
+            <span class="amount-input-wrap"><input id="amount" type="text" inputmode="none" autocomplete="off" placeholder="0" readonly required /></span>
+            <span class="tenkey-note">ATM風テンキーで入力します</span>
+          </label>
+        </div>
+        <div class="tenkey" aria-label="金額入力テンキー">
+          <div class="tenkey-head"><span>金額入力テンキー</span><button class="mini" type="button" id="clearAmountBtn">クリア</button></div>
+          <div class="tenkey-grid">
+            <button class="tenkey-key" type="button" data-key="1">1</button>
+            <button class="tenkey-key" type="button" data-key="2">2</button>
+            <button class="tenkey-key" type="button" data-key="3">3</button>
+            <button class="tenkey-key" type="button" data-key="4">4</button>
+            <button class="tenkey-key" type="button" data-key="5">5</button>
+            <button class="tenkey-key" type="button" data-key="6">6</button>
+            <button class="tenkey-key" type="button" data-key="7">7</button>
+            <button class="tenkey-key" type="button" data-key="8">8</button>
+            <button class="tenkey-key" type="button" data-key="9">9</button>
+            <button class="tenkey-key function" type="button" data-key="00">00</button>
+            <button class="tenkey-key zero" type="button" data-key="0">0</button>
+            <button class="tenkey-key function" type="button" data-key="back">⌫</button>
+            <button class="tenkey-key function" type="button" data-key="000">000</button>
+            <button class="tenkey-key function" type="button" data-key="clear">訂正</button>
+            <button class="tenkey-key enter" type="button" data-key="done">入力完了</button>
+          </div>
         </div>
         <div class="two">
           <label>用途<select id="category"></select></label>
@@ -451,6 +544,22 @@
   <script>
     const STORAGE_KEY = 'passbook-kakeibo-v2';
     const OLD_STORAGE_KEY = 'passbook-kakeibo-v1';
+    const memoryStore = {};
+    const storage = (() => {
+      try{
+        const testKey = '__passbook_storage_test__';
+        window.localStorage.setItem(testKey, '1');
+        window.localStorage.removeItem(testKey);
+        return window.localStorage;
+      }catch(e){
+        return {
+          getItem(key){ return Object.prototype.hasOwnProperty.call(memoryStore, key) ? memoryStore[key] : null; },
+          setItem(key, value){ memoryStore[key] = String(value); },
+          removeItem(key){ delete memoryStore[key]; },
+          clear(){ Object.keys(memoryStore).forEach(key => delete memoryStore[key]); }
+        };
+      }
+    })();
     const yen = new Intl.NumberFormat('ja-JP', {style:'currency', currency:'JPY', maximumFractionDigits:0});
     function ledgerMoney(value){ return yen.format(Number(value || 0)); }
     function moneyFitClass(value){
@@ -474,14 +583,14 @@
 
     function loadState(){
       try{
-        const raw = localStorage.getItem(STORAGE_KEY);
+        const raw = storage.getItem(STORAGE_KEY);
         if(raw) return normalizeState(JSON.parse(raw));
-        const oldRaw = localStorage.getItem(OLD_STORAGE_KEY);
+        const oldRaw = storage.getItem(OLD_STORAGE_KEY);
         if(oldRaw){
           const old = JSON.parse(oldRaw);
           const migrated = normalizeState(old);
           if(old.initialBalance !== undefined) migrated.monthlyInitialBalances[monthStr] = Number(old.initialBalance || 0);
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
+          storage.setItem(STORAGE_KEY, JSON.stringify(migrated));
           return migrated;
         }
       }catch(e){}
@@ -494,7 +603,7 @@
       if(!Array.isArray(output.entries)) output.entries = [];
       return output;
     }
-    function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+    function saveState(){ storage.setItem(STORAGE_KEY, JSON.stringify(state)); }
     function uid(){ return crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2); }
     function selectedMonth(){ return document.querySelector('#monthFilter').value || monthStr; }
     function hasMonthInitial(month){ return Object.prototype.hasOwnProperty.call(state.monthlyInitialBalances, month); }
@@ -663,6 +772,7 @@
       document.querySelector('#editId').value = '';
       document.querySelector('#date').value = selectedMonth() === monthStr ? todayStr : `${selectedMonth()}-01`;
       document.querySelector('input[name="type"][value="income"]').checked = true;
+      clearAmountValue();
       document.querySelector('#saveBtn').textContent = '記入する';
       renderCategoryOptions();
     }
@@ -674,10 +784,31 @@
       a.click();
       URL.revokeObjectURL(a.href);
     }
+    function formatAmountInput(value){
+      const digits = String(value || '').replace(/\D/g,'').replace(/^0+(?=\d)/,'');
+      return digits ? Number(digits).toLocaleString('ja-JP') : '';
+    }
+    function rawAmountValue(){
+      return String(document.querySelector('#amount').value || '').replace(/\D/g,'');
+    }
+    function setAmountValue(value){
+      document.querySelector('#amount').value = formatAmountInput(value);
+    }
+    function appendAmountValue(chunk){
+      const next = (rawAmountValue() + String(chunk)).slice(0, 9);
+      setAmountValue(next);
+    }
+    function backspaceAmountValue(){
+      setAmountValue(rawAmountValue().slice(0, -1));
+    }
+    function clearAmountValue(){
+      setAmountValue('');
+    }
 
     document.querySelector('#date').value = todayStr;
     document.querySelector('#monthFilter').value = monthStr;
     document.querySelector('#initialMonth').value = monthStr;
+    document.querySelector('#amount').addEventListener('focus', e => e.target.blur());
 
     document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => switchPanel(b.dataset.panel)));
     document.querySelector('#todayBtn').addEventListener('click', () => { document.querySelector('#monthFilter').value = monthStr; document.querySelector('#initialMonth').value = monthStr; selectedEntryId = ''; clearForm(); render(); });
@@ -695,15 +826,29 @@
       clearForm();
       render();
     });
+    document.querySelector('.tenkey-grid').addEventListener('click', e => {
+      const key = e.target.closest('[data-key]')?.dataset.key;
+      if(!key) return;
+      if(/^\d+$/.test(key)) appendAmountValue(key);
+      else if(key === 'back') backspaceAmountValue();
+      else if(key === 'clear') clearAmountValue();
+      else if(key === 'done') document.querySelector('#detail').focus();
+    });
+    document.querySelector('#clearAmountBtn').addEventListener('click', clearAmountValue);
 
     document.querySelector('#entryForm').addEventListener('submit', e => {
       e.preventDefault();
       const id = document.querySelector('#editId').value;
+      const amountValue = Number(rawAmountValue());
+      if(!amountValue){
+        alert('金額を入力してください');
+        return;
+      }
       const entry = {
         id: id || uid(),
         type: document.querySelector('input[name="type"]:checked').value,
         date: document.querySelector('#date').value,
-        amount: Number(document.querySelector('#amount').value),
+        amount: amountValue,
         category: document.querySelector('#category').value,
         detail: document.querySelector('#detail').value.trim(),
         memo: document.querySelector('#memo').value.trim(),
@@ -732,7 +877,7 @@
       document.querySelector('#editId').value = item.id;
       document.querySelector(`input[name="type"][value="${item.type}"]`).checked = true;
       document.querySelector('#date').value = item.date;
-      document.querySelector('#amount').value = item.amount;
+      setAmountValue(item.amount);
       document.querySelector('#category').value = item.category;
       document.querySelector('#detail').value = item.detail || '';
       document.querySelector('#memo').value = item.memo || '';
