@@ -386,6 +386,7 @@
     }
     .tenkey-key:active{transform:translateY(1px);box-shadow:0 1px 0 #cad3cb, 0 4px 8px rgba(38,65,45,.12)}
     .tenkey-key.function{font-size:16px}
+    .tenkey-key.correction{grid-column:span 2}
     .tenkey-key.zero{grid-column:span 1}
     .tenkey-key.enter{
       background:linear-gradient(180deg,#dff6e5 0%,#b6e6c2 100%);
@@ -470,7 +471,6 @@
           <label>日付<input id="date" type="date" required /></label>
           <label class="amount-label-wrap">金額
             <span class="amount-input-wrap"><input id="amount" type="text" inputmode="none" autocomplete="off" placeholder="0" readonly required /></span>
-            <span class="tenkey-note">ATM風テンキーで入力します</span>
           </label>
         </div>
         <div class="tenkey" aria-label="金額入力テンキー">
@@ -488,14 +488,13 @@
             <button class="tenkey-key function" type="button" data-key="00">00</button>
             <button class="tenkey-key zero" type="button" data-key="0">0</button>
             <button class="tenkey-key function" type="button" data-key="back">⌫</button>
-            <button class="tenkey-key function" type="button" data-key="000">000</button>
-            <button class="tenkey-key function" type="button" data-key="clear">訂正</button>
+            <button class="tenkey-key function correction" type="button" data-key="clear">訂正</button>
             <button class="tenkey-key enter" type="button" data-key="done">入力完了</button>
           </div>
         </div>
         <div class="two">
           <label>用途<select id="category"></select></label>
-          <label>お店, 相手, 補足<input id="detail" type="text" placeholder="ランチ代, 6月分など" /></label>
+          <label>補足<input id="detail" type="text" placeholder="ランチ代など" /></label>
         </div>
         <label>メモ<textarea id="memo" placeholder="必要なら詳細を記入"></textarea></label>
         <button class="primary" type="submit" id="saveBtn">記入する</button>
